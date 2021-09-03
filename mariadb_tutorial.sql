@@ -14,7 +14,7 @@ USE bitemporal;
 -- WITH SYSTEM VERSIONING syntax invisibly adds these lines
 --   row_start TIMESTAMP(6) GENERATED ALWAYS AS ROW START,
 --   row_end TIMESTAMP(6) GENERATED ALWAYS AS ROW END,
---   PERIOD FOR SYSTEM_TIME(start_timestamp, end_timestamp)
+--   PERIOD FOR SYSTEM_TIME(row_start, row_end)
 -- Add "WITHOUT SYSTEM VERSIONING" to a column to ignore updates.
 -- Can also put historical data into partition(s)
 DROP TABLE IF EXISTS purchaseOrderLines;
@@ -126,7 +126,8 @@ SELECT
   , row_end
 FROM employees
 FOR SYSTEM_TIME ALL
-WHERE empID = 3 ORDER BY startDate;
+WHERE empID = 3
+ORDER BY startDate;
 
 UPDATE employees
   FOR PORTION OF appl_time
@@ -146,7 +147,8 @@ SELECT
   , row_end
 FROM employees
 FOR SYSTEM_TIME ALL
-WHERE empID = 3 ORDER BY startDate;
+WHERE empID = 3
+ORDER BY startDate;
 
 UPDATE employees
   SET address = '239 Rutherford Ave.'
